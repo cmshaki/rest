@@ -128,12 +128,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 auth_classes = [
     "rest_framework.authentication.SessionAuthentication",
-    "api.authentication.TokenAuthentication",
+    # "api.authentication.TokenAuthentication",
 ]
-if DEBUG:
-    auth_classes = [
-        "api.authentication.TokenAuthentication",
-    ]
+# if DEBUG:
+#     auth_classes = [
+#         "api.authentication.TokenAuthentication",
+#     ]
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": auth_classes,
