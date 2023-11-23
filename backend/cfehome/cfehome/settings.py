@@ -9,16 +9,16 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
 from pathlib import Path
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
 from dotenv import load_dotenv
+
+import datetime
 import os
 
 load_dotenv()
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -28,9 +28,9 @@ load_dotenv()
 SECRET_KEY = "django-insecure-e^=aue02&z!0tw+$wjl74_a1u^^_a2!+$pn=xrmswd)rzd0jyb"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     # third party packages
     "rest_framework",
     "rest_framework.authtoken",
+    "rest_framework_simplejwt",
     # internal apps
     "api",
     "articles",
@@ -140,6 +141,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 auth_classes = [
     "rest_framework.authentication.SessionAuthentication",
     "api.authentication.TokenAuthentication",
+    "rest_framework_simplejwt.authentication.JWTAuthentication",
 ]
 # if DEBUG:
 #     auth_classes = [
@@ -159,4 +161,10 @@ ALGOLIA = {
     "APPLICATION_ID": os.environ.get("APPLICATION_ID"),
     "API_KEY": os.environ.get("API_KEY"),
     "INDEX_PREFIX": os.environ.get("INDEX_PREFIX"),
+}
+
+SIMPLE_JWT = {
+    "AUTH_HEADER_TYPES": ["Bearer"],
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(seconds=30),  # 3 hours
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(minutes=1),  # one day
 }
