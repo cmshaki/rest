@@ -7,5 +7,9 @@ from .models import Product
 @register(Product)
 class ProductIndex(AlgoliaIndex):
     should_index = "is_public"
-    fields = ["title", "content", "price", "user", "public"]
+    fields = ["title", "body", "price", "user", "public", "path"]
+    settings = {
+        "searchableAttributes": ["title", "content"],
+        "attributesForFaceting": ["user", "public"],
+    }
     tags = "get_tags_list"

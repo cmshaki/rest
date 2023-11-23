@@ -19,11 +19,8 @@ class ProductSerializer(serializers.ModelSerializer):
     #     source="user.product_set.all", read_only=True, many=True
     # )
     # my_discount = serializers.SerializerMethodField(read_only=True)
-    edit_url = serializers.SerializerMethodField(read_only=True)
-    url = serializers.HyperlinkedIdentityField(
-        view_name="product-detail", lookup_field="pk"
-    )
     title = serializers.CharField(validators=[validate_title, validate_title_no_hello])
+    body = serializers.CharField(source="content")
     # name = serializers.CharField(source="title", read_only=True)
     # email = serializers.EmailField(source="user.email", read_only=True)
 
@@ -31,13 +28,14 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = [
             "owner",
-            "url",
-            "edit_url",
             "pk",
             "title",
-            "content",
+            "body",
             "price",
+            "public",
             "sale_price",
+            "path",
+            "endpoint",
             # "my_discount",
             # "related_products",
         ]

@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     # internal apps
     "api",
+    "articles",
     "products",
     "search",
 ]
