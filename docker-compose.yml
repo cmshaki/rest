@@ -1,0 +1,23 @@
+version: "2.23.0-desktop.1"
+
+services:
+  django_gunicorn:
+    volumes:
+      - static:/static
+    env_file:
+      - ./backend/cfehome/.env
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+  nginx:
+    build: ./backend/nginx
+    volumes:
+      - static:/static
+    ports:
+      - "80:80"
+    depends_on:
+      - django_gunicorn
+
+volumes:
+  static:

@@ -13,7 +13,7 @@ class UserQuerysetMixin:
 
     def get_queryset(self, *args, **kwargs):
         user = self.request.user
-        allow_staff_view = False
+        # allow_staff_view = False
         lookup_data = {}
         lookup_data[self.user_field] = user
         qs = super().get_queryset(*args, **kwargs)

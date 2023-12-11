@@ -25,12 +25,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-e^=aue02&z!0tw+$wjl74_a1u^^_a2!+$pn=xrmswd)rzd0jyb"
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG")
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+# ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -140,7 +141,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_ROOT = "/static/"
+STATIC_URL = "/static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -167,9 +169,9 @@ REST_FRAMEWORK = {
 }
 
 ALGOLIA = {
-    "APPLICATION_ID": os.environ.get("APPLICATION_ID"),
-    "API_KEY": os.environ.get("API_KEY"),
-    "INDEX_PREFIX": os.environ.get("INDEX_PREFIX"),
+    "APPLICATION_ID": os.getenv("APPLICATION_ID"),
+    "API_KEY": os.getenv("API_KEY"),
+    "INDEX_PREFIX": os.getenv("INDEX_PREFIX"),
     "AUTO_INDEXING": True,
 }
 
