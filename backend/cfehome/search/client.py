@@ -22,9 +22,14 @@ def perform_search(query, **kwargs):
     index_filters = [f"{k}:{v}" for k, v in kwargs.items() if v]
     if index_filters != 0:
         params["facetFilters"] = index_filters
+    print(params)
     queries = [
-        {"indexName": "cfe_Product", "query": query, "params": params},
-        {"indexName": "cfe_Article", "query": query, "params": params},
+        {"indexName": "cfe_Product", "query": query, **params},
+        {
+            "indexName": "cfe_Article",
+            "query": query,
+            **params,
+        },
     ]
     results = client.multiple_queries(queries)
     return results

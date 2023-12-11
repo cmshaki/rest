@@ -1,6 +1,6 @@
 const contentContainer = document.getElementById("content-container");
 const loginForm = document.getElementById("login-form");
-const searchFormForm = document.getElementById("search-form");
+const searchForm = document.getElementById("search-form");
 const baseEndpoint = "http://localhost:8000/api";
 
 const handleAuthData = (authData, callback) => {
@@ -71,13 +71,14 @@ const refreshToken = () => {
   fetch(endpoint, options)
     .then((response) => response.json())
     .then((x) => {
-      console.log(x);
       if (x?.access) {
         localStorage.setItem("access", x.access);
       }
       const isValid = isTokenNotValid(x);
       if (isValid) {
         // getProductList();
+      } else {
+        alert("Please Login");
       }
     });
 };
@@ -94,7 +95,6 @@ const validateJWTToken = () => {
   fetch(endpoint, options)
     .then((response) => response.json())
     .then((x) => {
-      console.log(x);
       if (x?.code === "token_not_valid") {
         refreshToken();
       } else {
@@ -121,17 +121,48 @@ const handleLogin = (e) => {
     });
 };
 
-const handleSearch = () => {
+const handleSearch = (e) => {
   e.preventDefault();
-  const endpoint = `${baseEndpoint}/search/`;
-  let searchFormData = new FormData(searchForm));
-  let searchObjectData = Object.fromEntries(searchFormData);
-  fetch(endpoint, getFetchOptions("POST", searchObjectData))
+
+  const formData = new FormData(searchForm);
+  const data = Object.fromEntries(formData);
+  const searchParams = new URLSearchParams(data);
+  const endpoint = `${baseEndpoint}/search/?${searchParams}`;
+  const headers = {
+    "Content-Type": "application/json",
+  };
+  const authToken = localStorage.getItem("access");
+  if (authToken) {
+    headers["Authorization"] = `Bearer ${authToken}`;
+  } else {
+    validateJWTToken();
+  }
+  const options = {
+    method: "GET",
+    headers,
+  };
+  fetch(endpoint, options)
     .then((response) => {
       return response.json();
     })
-    .then((authData) => {
-      handleAuthData(authData, getProductList);
+    .then((data) => {
+      const validData = isTokenNotValid(data);
+      if (validData && contentContainer) {
+        contentContainer.innerHTML = "";
+        if (data && data.hits) {
+          let htmlStr = "";
+          for (result in data.hits) {
+            htmlStr += "<li>" + result.title + "</li>";
+          }
+          contentContainer.innerHTML = htmlStr;
+          if (data.hits.length === 0) {
+            contentContainer.innerHTML = "<p>No results found</p>";
+          }
+        } else {
+          contentContainer.innerHTML = "<p>No results found</p>";
+        }
+      }
+      wrtieToContainer(data);
     })
     .catch((err) => {
       console.log("err: ", err);
@@ -139,7 +170,7 @@ const handleSearch = () => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  validateJWTToken();
+  // validateJWTToken();
 
   if (loginForm) {
     // handle this login form
@@ -147,6 +178,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   if (searchForm) {
     // handle this login form
-    // searchForm.addEventListener("submit", handleSearch);
+    searchForm.addEventListener("submit", handleSearch);
   }
 });

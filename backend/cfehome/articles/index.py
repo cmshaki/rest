@@ -3,14 +3,10 @@ from algoliasearch_django.decorators import register
 
 from .models import Article
 
-"""
-    TODO: register article Index
-"""
-
 
 @register(Article)
 class ArticleIndex(AlgoliaIndex):
-    # should_index = "is_public"
+    should_index = "is_public"
     fields = ["title", "body", "user", "publish_date", "path", "endpoint"]
     settings = {
         "searchableAttributes": ["title", "body"],

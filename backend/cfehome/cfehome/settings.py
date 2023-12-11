@@ -170,6 +170,7 @@ ALGOLIA = {
     "APPLICATION_ID": os.environ.get("APPLICATION_ID"),
     "API_KEY": os.environ.get("API_KEY"),
     "INDEX_PREFIX": os.environ.get("INDEX_PREFIX"),
+    "AUTO_INDEXING": True,
 }
 
 SIMPLE_JWT = {
